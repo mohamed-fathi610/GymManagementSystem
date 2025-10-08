@@ -9,6 +9,11 @@ namespace GymManagementDAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.Property(C => C.CategoryName).HasColumnType("nvarchar(20)");
+
+            builder
+                .HasMany(c => c.Sessions)
+                .WithOne(s => s.Category)
+                .HasForeignKey(s => s.CategoryId);
         }
     }
 }

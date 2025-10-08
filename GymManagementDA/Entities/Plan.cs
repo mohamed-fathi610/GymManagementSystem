@@ -14,5 +14,13 @@ namespace GymManagementDAL.Entities
         public decimal Price { get; set; }
 
         public bool IsActive { get; set; }
+
+        #region RelationShips
+
+        #region Plan - MemberShips
+        public ICollection<MemberShip> MemberShips { get; set; }
+        #endregion
+
+        #endregion
     }
 }
