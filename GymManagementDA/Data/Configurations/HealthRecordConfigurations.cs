@@ -8,7 +8,7 @@ namespace GymManagementDAL.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<HealthRecord> builder)
         {
-            builder.ToTable("HealthRecord").HasKey(hr => hr.Id);
+            builder.ToTable("Members").HasKey(hr => hr.Id);
 
             builder
                 .HasOne<Member>()
