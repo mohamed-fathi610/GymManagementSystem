@@ -1,6 +1,6 @@
 ﻿namespace GymManagementDAL.Entities.Enums
 {
-    internal enum Gender
+    public enum Gender
     {
         Male = 1,
         Female,

@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementDAL.Data.Context
 {
-    internal class GymDbContext : DbContext
+    public class GymDbContext : DbContext
     {
+        public GymDbContext(DbContextOptions<GymDbContext> options)
+            : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
