@@ -1,3 +1,5 @@
+using GymManagementDAL.Data.Context;
+
 namespace GymManagementPL
 {
     public class Program
@@ -26,8 +28,9 @@ namespace GymManagementPL
 
             app.MapStaticAssets();
             app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                )
                 .WithStaticAssets();
 
             app.Run();

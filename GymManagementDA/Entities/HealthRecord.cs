@@ -1,6 +1,6 @@
 ﻿namespace GymManagementDAL.Entities
 {
-    internal class HealthRecord : BaseEntity
+    public class HealthRecord : BaseEntity
     {
         public decimal Height { get; set; }
 

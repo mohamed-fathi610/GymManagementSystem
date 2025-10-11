@@ -2,7 +2,7 @@
 
 namespace GymManagementDAL.Entities
 {
-    internal class Trainer : GymUser
+    public class Trainer : GymUser
     {
         // HireDate => CreatedAt
 
