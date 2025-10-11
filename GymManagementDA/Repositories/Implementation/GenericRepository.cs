@@ -9,7 +9,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementDAL.Repositories.Implementation
 {
-    internal class GenericRepository<TEntity> : IGenericRepository<TEntity>
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : BaseEntity, new()
     {
         private readonly GymDbContext _dbContext;

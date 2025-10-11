@@ -4,7 +4,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementDAL.Repositories.Implementation
 {
-    internal class PlanRepository : IPlanRepository
+    public class PlanRepository : IPlanRepository
     {
         private readonly GymDbContext _dbContext;
 

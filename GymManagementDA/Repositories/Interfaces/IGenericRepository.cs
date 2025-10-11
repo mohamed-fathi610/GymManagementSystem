@@ -7,7 +7,7 @@ using GymManagementDAL.Entities;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    internal interface IGenericRepository<TEntity>
+    public interface IGenericRepository<TEntity>
         where TEntity : BaseEntity, new()
     {
         TEntity? GetById(int id);
