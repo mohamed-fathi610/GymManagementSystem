@@ -4,38 +4,26 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementDAL.Repositories.Implementation
 {
-    internal class PlanRepository : IPlanRepository
+    public class PlanRepository : IPlanRepository
     {
-        private readonly GymDbContext _DbContext = new GymDbContext();
+        private readonly GymDbContext _dbContext;
 
-        public int Add(Plan plan)
+        public PlanRepository(GymDbContext dbContext)
         {
-            _DbContext.Plans.Add(plan);
-            return _DbContext.SaveChanges();
+            _dbContext = dbContext;
         }
 
-        public IEnumerable<Plan> GetAllPlans() => _DbContext.Plans.ToList();
+        public IEnumerable<Plan> GetAllPlans() => _dbContext.Plans.ToList();
 
-        public Plan? GetById(int id) => _DbContext.Plans.Find(id);
-
-        public int Remove(int id)
-        {
-            var plan = _DbContext.Plans.Find(id);
-            if (plan is not null)
-            {
-                _DbContext.Plans.Remove(plan);
-                return _DbContext.SaveChanges();
-            }
-            return 0;
-        }
+        public Plan? GetById(int id) => _dbContext.Plans.Find(id);
 
         public int Update(Plan plan)
         {
-            var existingPlan = _DbContext.Plans.Find(plan.Id);
+            var existingPlan = _dbContext.Plans.Find(plan.Id);
             if (existingPlan is not null)
             {
-                _DbContext.Plans.Update(plan);
-                return _DbContext.SaveChanges();
+                _dbContext.Plans.Update(plan);
+                return _dbContext.SaveChanges();
             }
             return 0;
         }
