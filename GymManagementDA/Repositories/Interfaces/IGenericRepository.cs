@@ -11,7 +11,7 @@ namespace GymManagementDAL.Repositories.Interfaces
         where TEntity : BaseEntity, new()
     {
         TEntity? GetById(int id);
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null);
 
         int Add(TEntity entity);
 
