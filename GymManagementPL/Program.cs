@@ -45,7 +45,7 @@ namespace GymManagementPL
                     pattern: "{controller=Home}/{action=Index}/{id?}"
                 )
                 .WithStaticAssets();
-
+            //just a test comment
             app.Run();
         }
     }
