@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GymManagementBLL.View_Models;
+using GymManagementBLL.View_Models.MemberVM;
 
 namespace GymManagementBLL.BusinessServices.Interfaces
 {
@@ -16,5 +16,9 @@ namespace GymManagementBLL.BusinessServices.Interfaces
         MemberViewModel? GetMemberDetails(int memberId);
 
         HealthRecordViewModel? GetMemberHealthRecord(int memberId);
+
+        MemberToUpdateViewModel? GetMemberToUpdate(int memberId);
+
+        bool UpdateMember(int memberId, MemberToUpdateViewModel memberToUpdate);
     }
 }
