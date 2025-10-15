@@ -2,7 +2,7 @@
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    internal interface IPlanRepository
+    public interface IPlanRepository
     {
         //GetAllPlans
         IEnumerable<Plan> GetAllPlans();
