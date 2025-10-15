@@ -16,16 +16,19 @@ namespace GymManagementBLL.BusinessServices.Implementation
         private readonly IGenericRepository<Member> _memberRepository;
         private readonly IGenericRepository<MemberShip> _memberShipRepository;
         private readonly IPlanRepository _planRepository;
+        private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
 
         public MemberService(
             IGenericRepository<Member> memberRepository,
             IGenericRepository<MemberShip> memberShipRepository,
-            IPlanRepository planRepository
+            IPlanRepository planRepository,
+            IGenericRepository<HealthRecord> healthRecordRepository
         )
         {
             _memberRepository = memberRepository;
             _memberShipRepository = memberShipRepository;
             _planRepository = planRepository;
+            _healthRecordRepository = healthRecordRepository;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -133,6 +136,21 @@ namespace GymManagementBLL.BusinessServices.Implementation
                     memberViewModel.PlanName = plan.Name;
             }
             return memberViewModel;
+        }
+
+        public HealthRecordViewModel? GetMemberHealthRecord(int memberId)
+        {
+            var memberHealthRecord = _healthRecordRepository.GetById(memberId);
+
+            if (memberHealthRecord is null)
+                return null;
+            return new HealthRecordViewModel
+            {
+                Height = memberHealthRecord.Height,
+                Weight = memberHealthRecord.Weight,
+                BloodType = memberHealthRecord.BloodType,
+                Note = memberHealthRecord.Note,
+            };
         }
     }
 }
