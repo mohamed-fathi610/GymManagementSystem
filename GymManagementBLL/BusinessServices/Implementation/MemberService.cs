@@ -11,18 +11,24 @@ namespace GymManagementBLL.BusinessServices.Implementation
         private readonly IGenericRepository<MemberShip> _memberShipRepository;
         private readonly IPlanRepository _planRepository;
         private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
+        private readonly IGenericRepository<MemberSession> _memberSessionRepository;
+        private readonly IGenericRepository<Session> _sessionRepository;
 
         public MemberService(
             IGenericRepository<Member> memberRepository,
             IGenericRepository<MemberShip> memberShipRepository,
             IPlanRepository planRepository,
-            IGenericRepository<HealthRecord> healthRecordRepository
+            IGenericRepository<HealthRecord> healthRecordRepository,
+            IGenericRepository<MemberSession> memberSessionRepository,
+            IGenericRepository<Session> sessionRepository
         )
         {
             _memberRepository = memberRepository;
             _memberShipRepository = memberShipRepository;
             _planRepository = planRepository;
             _healthRecordRepository = healthRecordRepository;
+            _memberSessionRepository = memberSessionRepository;
+            _sessionRepository = sessionRepository;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -159,6 +165,38 @@ namespace GymManagementBLL.BusinessServices.Implementation
                 City = member.Adress.City,
                 Street = member.Adress.Street,
             };
+        }
+
+        public bool RemoveMember(int memberId)
+        {
+            try
+            {
+                var member = _memberRepository.GetById(memberId);
+                if (member is null)
+                    return false;
+                var memberSessionsIds = _memberSessionRepository
+                    .GetAll(ms => ms.MemberId == memberId)
+                    .Select(S => S.SessionId);
+                var hasFutureSessions = _sessionRepository
+                    .GetAll(s => memberSessionsIds.Contains(s.Id) && s.StartDate > DateTime.Now)
+                    .Any();
+                if (hasFutureSessions)
+                    return false;
+
+                var memberShips = _memberShipRepository.GetAll(ms => ms.MemberId == memberId);
+                if (memberShips.Any())
+                {
+                    foreach (var memberShip in memberShips)
+                    {
+                        _memberShipRepository.Delete(memberShip); // trancsaction 1
+                    }
+                }
+                return _memberRepository.Delete(member) > 0; // Trancsaction 2
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool UpdateMember(int memberId, MemberToUpdateViewModel memberToUpdate)
