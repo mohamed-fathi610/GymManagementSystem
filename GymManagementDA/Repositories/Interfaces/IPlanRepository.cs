@@ -11,6 +11,6 @@ namespace GymManagementDAL.Repositories.Interfaces
         Plan? GetById(int id);
 
         //Update
-        int Update(Plan plan);
+        void Update(Plan plan);
     }
 }

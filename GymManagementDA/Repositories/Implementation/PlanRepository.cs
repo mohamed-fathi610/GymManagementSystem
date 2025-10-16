@@ -17,15 +17,11 @@ namespace GymManagementDAL.Repositories.Implementation
 
         public Plan? GetById(int id) => _dbContext.Plans.Find(id);
 
-        public int Update(Plan plan)
+        public void Update(Plan plan)
         {
             var existingPlan = _dbContext.Plans.Find(plan.Id);
             if (existingPlan is not null)
-            {
                 _dbContext.Plans.Update(plan);
-                return _dbContext.SaveChanges();
-            }
-            return 0;
         }
     }
 }
