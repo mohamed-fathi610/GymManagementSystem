@@ -6,17 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using GymManagementDAL.Entities.Enums;
 
-namespace GymManagementBLL.View_Models
+namespace GymManagementBLL.View_Models.MemberVM
 {
-    internal class CreateMemberViewModel
+    public class MemberToUpdateViewModel
     {
-        [Required(ErrorMessage = "Name is Required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 50")]
-        [RegularExpression(
-            @"^[a-zA-Z\s]+$",
-            ErrorMessage = "Name Must Contain Letters or Spaces Only"
-        )]
         public string Name { get; set; } = null!;
+        public string? Photo { get; set; }
 
         [Required(ErrorMessage = "Email is Required")]
         [EmailAddress(ErrorMessage = "Invaild Email Format")]
@@ -28,13 +23,6 @@ namespace GymManagementBLL.View_Models
         [Phone(ErrorMessage = "Invaild Phone Format")]
         [RegularExpression(@"^(010|011|012|015)\d{8}$")]
         public string Phone { get; set; } = null!;
-
-        [Required(ErrorMessage = "DateOfBirth is Required")]
-        [DataType(DataType.Date)]
-        public DateOnly DateOfBirth { get; set; }
-
-        [Required(ErrorMessage = "Gender is Required")]
-        public Gender Gender { get; set; }
 
         [Required(ErrorMessage = "Building Number is Required")]
         [Range(1, 9000, ErrorMessage = "Building Number between 1 and 9000")]
@@ -55,8 +43,5 @@ namespace GymManagementBLL.View_Models
             ErrorMessage = "Street Must Contain Letters or Spaces Only"
         )]
         public string Street { get; set; } = null!;
-
-        [Required(ErrorMessage = "Health Record is Required")]
-        public HealthRecordViewModel HealthRecord { get; set; } = null!;
     }
 }

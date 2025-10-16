@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace GymManagementBLL.View_Models
+namespace GymManagementBLL.View_Models.MemberVM
 {
-    internal class HealthRecordViewModel
+    public class HealthRecordViewModel
     {
         [Required(ErrorMessage = "Height is Required")]
         [Range(0.1, 300, ErrorMessage = "Height between 0.1 and 300 cm")]
