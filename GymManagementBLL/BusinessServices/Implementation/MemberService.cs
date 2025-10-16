@@ -43,6 +43,8 @@ namespace GymManagementBLL.BusinessServices.Implementation
                     BloodType = createMember.HealthRecord.BloodType,
                     Note = createMember.HealthRecord.Note,
                 },
+
+                CreatedAt = DateTime.Now,
             };
 
             _unitOfWork.GetRepository<Member>().Add(member);
@@ -76,7 +78,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
             if (members == null || !members.Any())
                 return [];
 
-            var listOfMemberViewModel = members.Select(member => new MemberViewModel
+            return members.Select(member => new MemberViewModel
             {
                 Id = member.Id,
                 Name = member.Name,
@@ -86,7 +88,6 @@ namespace GymManagementBLL.BusinessServices.Implementation
                 Gender = member.Gender.ToString(),
             });
 
-            return listOfMemberViewModel;
             #endregion
         }
 
