@@ -44,6 +44,7 @@ namespace GymManagementBLL.View_Models.TrainerVM
         public string Street { get; set; } = null!;
 
         [Required(ErrorMessage = "Specialities is Required")]
+        [EnumDataType(typeof(Specialities))]
         public Specialities Specialty { get; set; }
     }
 }
