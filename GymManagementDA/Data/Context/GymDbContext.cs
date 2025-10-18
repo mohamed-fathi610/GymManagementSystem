@@ -29,5 +29,6 @@ namespace GymManagementDAL.Data.Context
         public DbSet<HealthRecord> HealthRecords { get; set; }
         public DbSet<MemberShip> MemberShips { get; set; }
         public DbSet<MemberSession> MemberSessions { get; set; }
+        public object MembershipPlans { get; internal set; }
     }
 }

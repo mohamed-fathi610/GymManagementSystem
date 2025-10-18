@@ -45,8 +45,15 @@ namespace GymManagementBLL.BusinessServices.Implementation
                 CreatedAt = DateTime.Now,
             };
 
-            _unitOfWork.GetRepository<Trainer>().Add(trainer);
-            return _unitOfWork.SaveChanges() > 0;
+            try
+            {
+                _unitOfWork.GetRepository<Trainer>().Add(trainer);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public IEnumerable<TrainerViewModel> GetAllTrainers()
@@ -79,6 +86,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
                 Email = trainer.Email,
                 Phone = trainer.Phone,
                 DateOfBirth = trainer.DateOfBirth.ToShortDateString(),
+                Gender = trainer.Gender.ToString(),
                 Address =
                     $"{trainer.Adress.BuildingNumber}-{trainer.Adress.City}-{trainer.Adress.Street}",
             };
@@ -122,20 +130,34 @@ namespace GymManagementBLL.BusinessServices.Implementation
                 return false;
             }
 
-            trainerRepo.Delete(trainer);
-            var result = _unitOfWork.SaveChanges() > 0;
-
-            return result;
+            try
+            {
+                trainerRepo.Delete(trainer);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool UpdatedTrainer(int trainerId, TrainerToUpdateViewModel trainerToUpdate)
         {
             var trainerRepo = _unitOfWork.GetRepository<Trainer>();
+
+            var emailExist = trainerRepo
+                .GetAll(X => X.Email == trainerToUpdate.Email && X.Id != trainerId)
+                .Any();
+
+            var phoneExist = trainerRepo
+                .GetAll(X => X.Phone == trainerToUpdate.Phone && X.Id != trainerId)
+                .Any();
+
             var trainer = trainerRepo.GetById(trainerId);
-            if (trainer is null)
+
+            if (trainerToUpdate is null || emailExist || phoneExist || trainer is null)
                 return false;
 
-            trainer.Name = trainerToUpdate.Name;
             trainer.Email = trainerToUpdate.Email;
             trainer.Phone = trainerToUpdate.Phone;
             trainer.Adress.BuildingNumber = trainerToUpdate.BuildingNumber;
@@ -144,8 +166,15 @@ namespace GymManagementBLL.BusinessServices.Implementation
             trainer.Specialities = trainerToUpdate.Specialty;
             trainer.UpdatedAt = DateTime.Now;
 
-            trainerRepo.Update(trainer);
-            return _unitOfWork.SaveChanges() > 0;
+            try
+            {
+                trainerRepo.Update(trainer);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #region Helper Method
