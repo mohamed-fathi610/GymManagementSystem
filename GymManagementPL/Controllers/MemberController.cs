@@ -32,5 +32,19 @@ namespace GymManagementPL.Controllers
             }
             return View(member);
         }
+
+        public ActionResult HealthRecordDetails(int id)
+        {
+            if (id <= 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            var healthRecord = _memberService.GetMemberHealthDetails(id);
+            if (healthRecord == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(healthRecord);
+        }
     }
 }
