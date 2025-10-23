@@ -7,7 +7,7 @@ using GymManagementBLL.View_Models.MemberVM;
 
 namespace GymManagementBLL.BusinessServices.Interfaces
 {
-    internal interface IMemberService
+    public interface IMemberService
     {
         IEnumerable<MemberViewModel> GetAllMembers();
 
