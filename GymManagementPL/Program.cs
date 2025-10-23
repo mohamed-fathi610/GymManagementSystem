@@ -1,4 +1,8 @@
+using GymManagementBLL.BusinessServices.Implementation;
+using GymManagementBLL.BusinessServices.Interfaces;
+using GymManagementBLL.Mapping;
 using GymManagementDAL.Data.Context;
+using GymManagementDAL.Data.SeedDate;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Implementation;
 using GymManagementDAL.Repositories.Interfaces;
@@ -24,11 +28,23 @@ namespace GymManagementPL
                 );
             });
 
-            // builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-            //builder.Services.AddScoped(typeof(IPlanRepository), typeof(PlanRepository));
+            builder.Services.AddScoped(typeof(ISessionRepository), typeof(SessionRepository));
+            builder.Services.AddScoped<IAnaltyicService, AnaltyicService>();
+            builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfile()));
+            builder.Services.AddScoped<IMemberService, MemberService>();
 
             var app = builder.Build();
+
+            using var scope = app.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
+
+            var pendingMigrations = dbContext.Database.GetPendingMigrations();
+
+            if (pendingMigrations?.Any() ?? false)
+                dbContext.Database.Migrate();
+
+            GymDbContextSeeding.SeedData(dbContext);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
