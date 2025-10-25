@@ -22,12 +22,14 @@ namespace GymManagementPL.Controllers
         {
             if (id <= 0)
             {
+                TempData["ErrorMessage"] = "Id cannot be negative or zero";
                 return RedirectToAction(nameof(Index));
             }
             var member = _memberService.GetMemberDetails(id);
 
             if (member == null)
             {
+                TempData["ErrorMessage"] = "Member Not Found";
                 return RedirectToAction(nameof(Index));
             }
             return View(member);
@@ -37,11 +39,13 @@ namespace GymManagementPL.Controllers
         {
             if (id <= 0)
             {
+                TempData["ErrorMessage"] = "Id cannot be negative or zero";
                 return RedirectToAction(nameof(Index));
             }
             var healthRecord = _memberService.GetMemberHealthDetails(id);
             if (healthRecord == null)
             {
+                TempData["ErrorMessage"] = "HealthRecord Not Found";
                 return RedirectToAction(nameof(Index));
             }
             return View(healthRecord);
