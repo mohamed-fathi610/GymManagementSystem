@@ -1,4 +1,5 @@
 ﻿using GymManagementBLL.BusinessServices.Interfaces;
+using GymManagementBLL.View_Models.MemberVM;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
@@ -50,5 +51,30 @@ namespace GymManagementPL.Controllers
             }
             return View(healthRecord);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateMember(CreateMemberViewModel createMember)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("DataInvalid", "There are missing Fields");
+                return View(nameof(Create), createMember);
+            }
+            bool result = _memberService.CreateMember(createMember);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Member Created Successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError("CreationFailed", "Member Creation Failed");
+                return View(nameof(Create), createMember);
+            }
     }
 }

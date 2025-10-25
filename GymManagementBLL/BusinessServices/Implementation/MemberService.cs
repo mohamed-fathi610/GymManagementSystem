@@ -54,6 +54,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
             //Create Member in Database
 
             var member = _mapper.Map<CreateMemberViewModel, Member>(createMember);
+            member.HealthRecord = _mapper.Map<HealthRecord>(createMember.HealthRecord);
 
             _unitOfWork.GetRepository<Member>().Add(member);
 
