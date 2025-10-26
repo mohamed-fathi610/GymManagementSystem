@@ -21,7 +21,10 @@ namespace GymManagementBLL.View_Models.MemberVM
 
         [Required(ErrorMessage = "Phone is Required")]
         [Phone(ErrorMessage = "Invaild Phone Format")]
-        [RegularExpression(@"^(010|011|012|015)\d{8}$")]
+        [RegularExpression(
+            @"^(010|011|012|015)\d{8}$",
+            ErrorMessage = "Must be Valid Egyption Phone Number"
+        )]
         public string Phone { get; set; } = null!;
 
         [Required(ErrorMessage = "DateOfBirth is Required")]
