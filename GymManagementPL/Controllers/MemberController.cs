@@ -13,12 +13,15 @@ namespace GymManagementPL.Controllers
             _memberService = memberService;
         }
 
+        #region Get All Members
         public ActionResult Index()
         {
             var members = _memberService.GetAllMembers();
             return View(members);
         }
+        #endregion
 
+        #region Get Member Details
         public ActionResult MemberDetails(int id)
         {
             if (id <= 0)
@@ -35,7 +38,9 @@ namespace GymManagementPL.Controllers
             }
             return View(member);
         }
+        #endregion
 
+        #region Get Member Health Details
         public ActionResult HealthRecordDetails(int id)
         {
             if (id <= 0)
@@ -52,6 +57,9 @@ namespace GymManagementPL.Controllers
             return View(healthRecord);
         }
 
+        #endregion
+
+        #region Create Member
         public ActionResult Create()
         {
             return View();
@@ -76,5 +84,48 @@ namespace GymManagementPL.Controllers
                 ModelState.AddModelError("CreationFailed", "Member Creation Failed");
                 return View(nameof(Create), createMember);
             }
+        }
+        #endregion
+
+        #region Edit Member
+
+        public ActionResult MemberEdit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Id cannot be negative or zero";
+                return RedirectToAction(nameof(Index));
+            }
+            var member = _memberService.GetMemberDetailsToUpdate(id);
+            if (member == null)
+            {
+                TempData["ErrorMessage"] = "Member Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(member);
+        }
+
+        [HttpPost]
+        public ActionResult MemberEdit([FromRoute] int id, MemberToUpdateViewModel updatedMember)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(updatedMember);
+            }
+
+            bool result = _memberService.UpdateMember(id, updatedMember);
+
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Member Updated Successfully";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Member Failed To Update ";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
     }
 }
