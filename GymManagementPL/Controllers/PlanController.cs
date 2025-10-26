@@ -82,5 +82,29 @@ namespace GymManagementPL.Controllers
             return RedirectToAction(nameof(Index));
         }
         #endregion
+
+        #region Activate plan
+
+        public ActionResult Activate(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Id cannot be negative or zero";
+                return RedirectToAction(nameof(Index));
+            }
+            var result = _planService.ToggleStatus(id);
+
+            if (!result)
+            {
+                TempData["ErrorMessage"] = "Failed to activate plan. Please try again.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Plan activated successfully.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
     }
 }
