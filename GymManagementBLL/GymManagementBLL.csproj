@@ -14,4 +14,8 @@
     <ProjectReference Include="..\GymManagementDA\GymManagementDAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View-Models\TrainerVM\" />
+  </ItemGroup>
+
 </Project>

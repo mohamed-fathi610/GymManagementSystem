@@ -6,7 +6,7 @@ using GymManagementDAL.UnitOfWork.Interfaces;
 
 namespace GymManagementBLL.BusinessServices.Implementation
 {
-    internal class TrainerService : ITrainerService
+    public class TrainerService : ITrainerService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
