@@ -127,7 +127,7 @@ namespace GymManagementPL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit([FromForm] int id, TrainerToUpdateViewModel updatedTrainer)
+        public ActionResult Edit([FromRoute] int id, TrainerToUpdateViewModel updatedTrainer)
         {
             if (!ModelState.IsValid)
             {
