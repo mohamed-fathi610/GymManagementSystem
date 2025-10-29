@@ -12,7 +12,7 @@ namespace GymManagementBLL.View_Models.TrainerVM
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
-        public string Specialty { get; set; } = null!;
+        public string Specialities { get; set; } = null!;
 
         public string? DateOfBirth { get; set; }
         public string? Gender { get; set; }
