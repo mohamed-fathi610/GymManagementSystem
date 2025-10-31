@@ -3,7 +3,7 @@
     public class Member : GymUser
     {
         //JoinDate => CreatedAt
-        public string? Photo { get; set; }
+        public string Photo { get; set; } = null!;
 
         #region RelationShips
 

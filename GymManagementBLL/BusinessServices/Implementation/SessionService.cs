@@ -152,6 +152,19 @@ namespace GymManagementBLL.BusinessServices.Implementation
             }
         }
 
+        public IEnumerable<TrainerSelectViewModel> GetTrainerForDropDown()
+        {
+            var trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
+
+            return _mapper.Map<IEnumerable<TrainerSelectViewModel>>(trainers);
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetCategoryForDropDown()
+        {
+            var categories = _unitOfWork.GetRepository<Category>().GetAll();
+            return _mapper.Map<IEnumerable<CategorySelectViewModel>>(categories);
+        }
+
         #region Helper Method
         public bool IsTrainerExist(int trainerId)
         {
@@ -165,7 +178,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
 
         private bool IsDateTimeValid(DateTime startDate, DateTime endDate)
         {
-            return startDate < endDate;
+            return startDate < endDate && DateTime.Now < startDate;
         }
 
         private bool IsSessionAvailableForUpdate(Session session)
@@ -207,6 +220,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
 
             return true;
         }
+
         #endregion
     }
 }

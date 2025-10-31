@@ -1,5 +1,6 @@
 using GymManagementBLL.BusinessServices.Implementation;
 using GymManagementBLL.BusinessServices.Interfaces;
+using GymManagementBLL.Helpers;
 using GymManagementBLL.Mapping;
 using GymManagementDAL.Data.Context;
 using GymManagementDAL.Data.SeedDate;
@@ -36,6 +37,7 @@ namespace GymManagementPL
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
+            builder.Services.AddScoped<IAttachementService, AttachementService>();
 
             var app = builder.Build();
 
