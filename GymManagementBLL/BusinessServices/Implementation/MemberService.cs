@@ -84,8 +84,9 @@ namespace GymManagementBLL.BusinessServices.Implementation
             var members = _unitOfWork.GetRepository<Member>().GetAll();
 
             if (members is null || !members.Any())
+            {
                 return [];
-
+            }
             #region Manual Mapping First Way
             //var listOfMembersViewModel=new List<MemberViewModel>();
 
