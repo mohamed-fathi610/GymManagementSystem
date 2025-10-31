@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GymManagementBLL.BusinessServices.Interfaces;
+using GymManagementBLL.Helpers;
 using GymManagementBLL.View_Models.MemberVM;
 using GymManagementDAL.Entities;
 using GymManagementDAL.UnitOfWork.Interfaces;
@@ -10,12 +11,18 @@ namespace GymManagementBLL.BusinessServices.Implementation
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IAttachementService _attachementService;
 
         //Ask CLR To inject object from class Implement interface IUnit of Workk Pattern
-        public MemberService(IUnitOfWork unitOfWork, IMapper mapper)
+        public MemberService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IAttachementService attachementService
+        )
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _attachementService = attachementService;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -53,12 +60,23 @@ namespace GymManagementBLL.BusinessServices.Implementation
 
             //Create Member in Database
 
+            var photoName = _attachementService.Upload("Members", createMember.PhotoFile);
+            if (string.IsNullOrEmpty(photoName))
+                return false;
+
             var member = _mapper.Map<CreateMemberViewModel, Member>(createMember);
             member.HealthRecord = _mapper.Map<HealthRecord>(createMember.HealthRecord);
+            member.Photo = photoName;
 
             _unitOfWork.GetRepository<Member>().Add(member);
 
-            return _unitOfWork.SaveChanges() > 0;
+            var isCreated = _unitOfWork.SaveChanges() > 0;
+            if (!isCreated)
+            {
+                _attachementService.Delete(photoName, "Members");
+                return false;
+            }
+            return true;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -226,7 +244,12 @@ namespace GymManagementBLL.BusinessServices.Implementation
 
                 memberRepo.Delete(member); //Transaction
 
-                return _unitOfWork.SaveChanges() > 0;
+                var isDeleted = _unitOfWork.SaveChanges() > 0;
+                if (isDeleted)
+                {
+                    _attachementService.Delete(member.Photo, "Members");
+                }
+                return isDeleted;
             }
             catch (Exception)
             {
