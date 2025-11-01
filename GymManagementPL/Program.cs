@@ -31,6 +31,7 @@ namespace GymManagementPL
 
             builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             builder.Services.AddScoped(typeof(ISessionRepository), typeof(SessionRepository));
+            builder.Services.AddScoped<IMemberShipRepository, MemberShipRepository>();
             builder.Services.AddScoped<IAnaltyicService, AnaltyicService>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfile()));
             builder.Services.AddScoped<IMemberService, MemberService>();
@@ -38,6 +39,8 @@ namespace GymManagementPL
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
             builder.Services.AddScoped<IAttachementService, AttachementService>();
+            builder.Services.AddScoped<IMemberShipService, MemberShipService>();
+            builder.Services.AddScoped<IMemberSessionRepository, MemberSessionRepository>();
 
             var app = builder.Build();
 

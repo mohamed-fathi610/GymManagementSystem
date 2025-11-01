@@ -16,11 +16,20 @@ namespace GymManagementDAL.UnitOfWork.Implementation
         private readonly Dictionary<Type, object> _repositories = new();
         private readonly GymDbContext _dbContext;
         public ISessionRepository SessionRepository { get; }
+        public IMemberShipRepository MemberShipRepository { get; }
+        public IMemberSessionRepository MemberSessionRepository { get; }
 
-        public UnitOfWork(GymDbContext dbContext, ISessionRepository sessionRepository)
+        public UnitOfWork(
+            GymDbContext dbContext,
+            ISessionRepository sessionRepository,
+            IMemberShipRepository memberShipRepository,
+            IMemberSessionRepository memberSessionRepository
+        )
         {
             _dbContext = dbContext;
             SessionRepository = sessionRepository;
+            MemberShipRepository = memberShipRepository;
+            MemberSessionRepository = memberSessionRepository;
         }
 
         public IGenericRepository<TEntity> GetRepository<TEntity>()
