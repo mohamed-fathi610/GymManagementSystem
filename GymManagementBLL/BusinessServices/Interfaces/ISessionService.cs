@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GymManagementBLL.View_Models.MemberSession;
 using GymManagementBLL.View_Models.SessionVM;
 using GymManagementSystemBLL.View_Models.SessionVm;
 
@@ -21,5 +17,15 @@ namespace GymManagementBLL.BusinessServices.Interfaces
         IEnumerable<TrainerSelectViewModel> GetTrainerForDropDown();
 
         IEnumerable<CategorySelectViewModel> GetCategoryForDropDown();
+
+        IEnumerable<MemberSelectViewModel> GetMembersForDropDown();
+
+        IEnumerable<MemberSessionViewModel> GetMembersForUpcomingSession(int sessionId);
+
+        bool CreateBooking(int sessionId, int memberId);
+
+        bool CancelBooking(int sessionId, int memberId);
+        bool MarkAttendance(int sessionId, int memberId, MemberSessionViewModel memberSession);
+        IEnumerable<MemberSessionViewModel> GetMembersForOngoingSession(int sessionId);
     }
 }

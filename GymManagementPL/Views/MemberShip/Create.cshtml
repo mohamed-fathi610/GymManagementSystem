@@ -1,0 +1,71 @@
+﻿@using GymManagementBLL.View_Models.Membership
+@model CreateMemberShipViewModel
+@{
+    ViewData["Title"] = "Create Membership";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="MemberId" class="form-label">Member</label>
+                            <select asp-for="MemberId" class="form-select"
+                                    asp-items="@(new SelectList(ViewBag.Members, "Id", "Name"))">
+                                <option value="">-- Select Member --</option>
+                            </select>
+                            <span asp-validation-for="MemberId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PlanId" class="form-label">Plan</label>
+                            <select asp-for="PlanId" class="form-select"
+                                    asp-items="@(new SelectList(ViewBag.Plans, "Id", "Name"))">
+                                <option value="">-- Select Plan --</option>
+                            </select>
+                            <span asp-validation-for="PlanId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            @* <label asp-for="StartDate" class="form-label">Start Date</label> *@
+                            <input hidden readonly asp-for="StartDate" type="date" class="form-control" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary w-100">Create Membership</button>
+                        </div>
+                        <div class="text-center">
+                            <a asp-action="Index" class="btn btn-secondary w-100">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.getElementById("Alert");
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.style.transition = "opacity 0.5s ease";
+                alertBox.style.opacity = "0";
+                setTimeout(() => alertBox.remove(), 500);
+            }, 2000);
+        }
+    });
+</script>
+}

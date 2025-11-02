@@ -1,0 +1,49 @@
+﻿@model GymManagementBLL.View_Models.MemberSession.MemberSessionViewModel
+
+<h1>Create New Booking</h1>
+<hr />
+
+<div class="row">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Booking Information</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" name="id" value="@ViewBag.Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Select Member</label>
+                            <select name="memberId" class="form-select" asp-items="ViewBag.MemberList">
+                                <option value="">-- Select Member --</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Booking
+                            </button>
+                            <a asp-action="GetMembersForUpcoming" asp-route-id="@ViewBag.Id" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/select2/js/select2.min.js"></script>
+<link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $('select[name="memberId"]').select2({
+            placeholder: "Select a member",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>

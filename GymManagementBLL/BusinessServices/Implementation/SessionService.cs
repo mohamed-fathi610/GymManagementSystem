@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using GymManagementBLL.BusinessServices.Interfaces;
+using GymManagementBLL.View_Models.MemberSession;
 using GymManagementBLL.View_Models.SessionVM;
 using GymManagementDAL.Entities;
 using GymManagementDAL.UnitOfWork.Interfaces;
 using GymManagementSystemBLL.View_Models.SessionVm;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementBLL.BusinessServices.Implementation
 {
@@ -159,10 +161,132 @@ namespace GymManagementBLL.BusinessServices.Implementation
             return _mapper.Map<IEnumerable<TrainerSelectViewModel>>(trainers);
         }
 
+        public IEnumerable<MemberSelectViewModel> GetMembersForDropDown()
+        {
+            var members = _unitOfWork.GetRepository<Member>().GetAll();
+            return members.Select(m => new MemberSelectViewModel { Id = m.Id, Name = m.Name });
+        }
+
         public IEnumerable<CategorySelectViewModel> GetCategoryForDropDown()
         {
             var categories = _unitOfWork.GetRepository<Category>().GetAll();
             return _mapper.Map<IEnumerable<CategorySelectViewModel>>(categories);
+        }
+
+        public IEnumerable<MemberSessionViewModel> GetMembersForUpcomingSession(int sessionId)
+        {
+            var memberSessions = _unitOfWork.MemberSessionRepository.GetMembersInSessionById(
+                sessionId
+            );
+
+            return memberSessions.Select(ms => new MemberSessionViewModel
+            {
+                MemberId = ms.MemberId,
+                MemberName = ms.Member.Name,
+                SessionId = ms.SessionId,
+                BookingDate = ms.CreatedAt,
+                IsAttended = ms.IsAttended,
+            });
+        }
+
+        public bool CreateBooking(int sessionId, int memberId)
+        {
+            var session = _unitOfWork.SessionRepository.GetByIdWithCategoryAndTrainer(sessionId);
+            var member = _unitOfWork.GetRepository<Member>().GetById(memberId);
+            if (session == null || member == null)
+                return false;
+
+            var hasActiveMembership = _unitOfWork
+                .MemberShipRepository.GetAll(m =>
+                    m.MemberId == memberId && m.EndDate > DateTime.Now
+                )
+                .Any();
+
+            if (!hasActiveMembership)
+                return false;
+
+            if (_unitOfWork.SessionRepository.GetCountOfBookedSlots(sessionId) >= session.Capacity)
+                return false;
+
+            if (
+                _unitOfWork
+                    .MemberSessionRepository.GetAll(Ms =>
+                        Ms.MemberId == memberId && session.StartDate > DateTime.Now
+                    )
+                    .Any()
+            )
+                return false;
+
+            if (session.StartDate <= DateTime.Now)
+                return false;
+
+            var booking = new MemberSession
+            {
+                MemberId = memberId,
+                SessionId = sessionId,
+                IsAttended = false,
+            };
+            _unitOfWork.GetRepository<MemberSession>().Add(booking);
+            return _unitOfWork.SaveChanges() > 0;
+        }
+
+        public bool CancelBooking(int sessionId, int memberId)
+        {
+            var booking = _unitOfWork
+                .MemberSessionRepository.GetAll(Ms =>
+                    Ms.MemberId == memberId && Ms.SessionId == sessionId
+                )
+                .FirstOrDefault();
+
+            if (booking == null)
+                return false;
+
+            try
+            {
+                _unitOfWork.MemberSessionRepository.Delete(booking);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool MarkAttendance(
+            int sessionId,
+            int memberId,
+            MemberSessionViewModel memberSession
+        )
+        {
+            var booking = _unitOfWork
+                .MemberSessionRepository.GetAll(Ms =>
+                    Ms.MemberId == memberId && Ms.SessionId == sessionId
+                )
+                .FirstOrDefault();
+            if (booking is null)
+                return false;
+
+            booking.IsAttended = true;
+            memberSession.IsAttended = true;
+
+            _unitOfWork.MemberSessionRepository.Update(booking);
+            return _unitOfWork.SaveChanges() > 0;
+        }
+
+        public IEnumerable<MemberSessionViewModel> GetMembersForOngoingSession(int sessionId)
+        {
+            var memberSessions = _unitOfWork.MemberSessionRepository.GetMembersInSessionById(
+                sessionId
+            );
+
+            return memberSessions.Select(ms => new MemberSessionViewModel
+            {
+                MemberId = ms.MemberId,
+                MemberName = ms.Member.Name,
+                SessionId = ms.SessionId,
+                BookingDate = ms.CreatedAt,
+                IsAttended = ms.IsAttended,
+            });
         }
 
         #region Helper Method
