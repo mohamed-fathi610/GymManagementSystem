@@ -63,7 +63,7 @@ else if (TempData["ErrorMessage"] != null)
                                 </div>
                                 <div class="info-item">
                                     <i class="bi bi-people text-primary-color me-2"></i>
-                                    <strong>Capacity:</strong> @item.AvailableSlots / @item.Capacity
+                                    <strong>Capacity:</strong> @(item.Capacity - item.AvailableSlots) / @item.Capacity
                                 </div>
                             </div>
                         </div>
