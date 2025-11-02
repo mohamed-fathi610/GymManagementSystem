@@ -211,7 +211,7 @@ namespace GymManagementBLL.BusinessServices.Implementation
             if (
                 _unitOfWork
                     .MemberSessionRepository.GetAll(Ms =>
-                        Ms.MemberId == memberId && session.StartDate > DateTime.Now
+                        Ms.MemberId == memberId && Ms.SessionId == sessionId
                     )
                     .Any()
             )
@@ -327,6 +327,8 @@ namespace GymManagementBLL.BusinessServices.Implementation
 
         private bool IsSessionAvailableForRemoving(Session session)
         {
+            if (session.EndDate < DateTime.Now)
+                return true;
             if (session == null)
                 return false;
 
